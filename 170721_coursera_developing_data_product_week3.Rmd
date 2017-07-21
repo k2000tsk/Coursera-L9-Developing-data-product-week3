@@ -1,0 +1,67 @@
+---
+title: "Coursera_Developing data product(week3)"
+author: "Taesoon Kim"
+output:
+  beamer_presentation: default
+  ioslides_presentation: default
+Date: Jul-21-2017
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction & Goal
+  - This project is the part of coursera lecture, developing data product.
+  
+  - The goal of this project is to create a web page presentation using R markdown that features a plot created with Plotly.
+  
+  - I will draw a graph using plotly() function, and make a web page presentation.
+  
+  - Download the KOSPI(Korean Composite Stock Price Index) figures and using plot_ly() function, I will draw a graph
+
+
+## Set the route and load library
+```{r set}
+setwd("D:/1-1. R studio/Lecture9. Developing data product/week3")
+
+# Today date
+format(Sys.Date(),"%m-%d-%Y")
+```
+
+```{r load,include=FALSE}
+# install.packages("plotly")
+library(plotly)
+```
+
+  - Load the library and check today's date.
+  - Today is Jul-21-2017
+
+## Read file and Process data
+
+```{r draw}
+# Read csv file
+library(data.table)
+stock_data<-fread("kospi.csv",sep=",",header=TRUE)
+
+# Sort the file order by date
+library(lubridate)
+stock_data$Date <- dmy(stock_data$Date)
+stock_order<-stock_data[order(Date),]
+
+# Calculate mean stock  of each day 
+stock_order$Avg<-1:nrow(stock_order)
+stock_order$Avg<-rowMeans(data.frame(stock_order$High,stock_order$Low))
+```
+
+## Plot the result
+```{r plot, echo=FALSE}
+# Plot
+library(ggplot2)
+plot_ly(stock_order,x=~Date,y=~Avg,mode="markers")%>%
+  layout(title="KOSPI figures from 2003 ~ 2017",xaxis=list(title="Year"),yaxis=list(title="Stock Figure")) %>%
+  add_ribbons(ymin=~Low,ymax=~High,name="Range of day") %>%
+  add_lines(color=I("red"),name="Average of day")
+```
+
+

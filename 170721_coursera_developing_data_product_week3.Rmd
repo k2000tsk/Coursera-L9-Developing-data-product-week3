@@ -20,7 +20,6 @@ knitr::opts_chunk$set(echo = TRUE)
   
   - Download the KOSPI(Korean Composite Stock Price Index) figures and using plot_ly() function, I will draw a graph
 
-
 ## Set the route and load library
 ```{r set}
 setwd("D:/1-1. R studio/Lecture9. Developing data product/week3")
